@@ -2,8 +2,8 @@
     <header class="header">
         <div class="container">
             <div class="row">
-                <div class="logo d-flex justify-content-center align-items-center">
-                    Logo MovieSuggester
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="/logo.png" class="logo" alt="Logo">
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
 .header{
     background-color: rgb(44, 197, 198);
     .logo{
-        height: 100px;
+        height: 150px;
     }
 }
 
