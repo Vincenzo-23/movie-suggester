@@ -23,7 +23,7 @@
 <style lang="scss" scoped>
 
 .header{
-    background-color: rgb(162, 238, 238);
+    background-color: rgb(44, 197, 198);
     .logo{
         height: 100px;
     }

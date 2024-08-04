@@ -1,25 +1,39 @@
 <template>
     <main>
-        <div class="container text-center my-5">
-            <button @click="fetchMovie()">Search</button>
+        <div class="container text-center my-5 fs-3">
+            Hai voglia di guardare un film o una serie tv ma non sai quale guardare? <br> Sei nel posto giusto, clicca il pulsante sottostante e scegli quelli che fanno fanno per te!
         </div>
-        <div class="container d-flex justify-content-center text-center">
-            <div class="card">
-                <div class="card-header">
-                    Title: {{ movies[0].title }}
-                </div>
-                <div class="card-img">
-                    <img v-if="movies[0].poster_path !== null" :src="`${this.imagePath}${this.poster_sizes[3]}${movies[0].poster_path}`" alt="Movie Poster">
-                </div>
-                <div class="card-body">
-                    <div>
-                        Vote Average: {{ movies[0].vote_average }}/10
+        <div class="container text-center my-5">
+            <button @click="fetchMovie()" class="btn me-4">Consigliami un film</button>
+            <button @click="fetchTv()" class="btn">Consigliami una serie tv</button>
+        </div>
+        <div v-if="this.item != null">
+            <div class="container d-flex justify-content-center text-center">
+                <div class="card my-3">
+                    <div class="card-header">
+                        <strong>Titolo:</strong> {{ item.title || item.name}}
                     </div>
-                    <div>
-                        Release Date: {{ movies[0].release_date }}
+                    <div class="card-img">
+                        <img v-if="item.poster_path !== null" :src="`${this.imagePath}${this.poster_sizes[3]}${item.poster_path}`" alt="Movie Poster">
+                        <div v-else class="mt-4"><strong>Copertina non disponibile</strong></div>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <strong>Media voti:</strong> {{ item.vote_average }}/10
+                        </div>
+                        <div v-if="item.release_date">
+                            <strong>Data di uscita:</strong> {{ item.release_date}}
+                        </div>
+                        <div v-if="item.runtime != null">
+                            <strong>Durata:</strong> {{ item.runtime }} min.
+                        </div>
+                        <div v-else>
+                            <div v-if="item.number_of_episodes != 0">
+                                <strong>Durata:</strong> {{ item.number_of_episodes }} Ep.
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
@@ -32,7 +46,7 @@ import axios from "axios"
     export default {
         data(){
             return {
-                movies: [],
+                item: {},
                 imagePath: "https://image.tmdb.org/t/p/",
                 poster_sizes: [
                 "w92",
@@ -47,13 +61,28 @@ import axios from "axios"
         },
         methods: {
             fetchMovie(){
-
                 const apiKey = `361d6824b040c59dc3ba6d0a8e180efe`;
                 const randomId = Math.floor(Math.random() * 1000) + 1;
 
                 axios.get(`https://api.themoviedb.org/3/movie/${randomId}?api_key=${apiKey}`)
                 .then(res => {
-                    this.movies = [res.data];
+                    this.item = res.data;
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 404) {
+                        console.error(`Movie with ID ${randomId} not found.`);
+                    } else {
+                        console.error(error);
+                    }
+                });
+            },
+            fetchTv(){
+                const apiKey = `361d6824b040c59dc3ba6d0a8e180efe`;
+                const randomId = Math.floor(Math.random() * 1000) + 1;
+
+                axios.get(`https://api.themoviedb.org/3/tv/${randomId}?api_key=${apiKey}`)
+                .then(res => {
+                    this.item = res.data;
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 404) {
@@ -63,13 +92,18 @@ import axios from "axios"
                     }
                 });
             }
-        }
+        },
     }
 </script>
 
 <style lang="scss" scoped>
 .card{
     width: 342px;
+}
+.btn{
+    background-color: rgb(44, 197, 198);
+    color: white;
+    font-weight: 700;
 }
 
 </style>

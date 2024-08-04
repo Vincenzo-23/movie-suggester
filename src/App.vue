@@ -21,5 +21,7 @@ export default {
 </template>
 
 <style lang="scss">
-
+body{
+  background-color: #edecec;
+}
 </style>
