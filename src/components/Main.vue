@@ -72,7 +72,7 @@ import axios from "axios"
                     if (error.response && error.response.status === 404) {
                         
                         // numbers of tries if the ID won't be found
-                        if (retryCount < 30) {
+                        if (retryCount < 50) {
                             this.fetchMovie(retryCount + 1);
                         }    
                     }
@@ -90,7 +90,7 @@ import axios from "axios"
                     if (error.response && error.response.status === 404) {
 
                         // numbers of tries if the ID won't be found
-                        if (retryCount < 30) {
+                        if (retryCount < 50) {
                             this.fetchTv(retryCount + 1);
                         }
                     }
