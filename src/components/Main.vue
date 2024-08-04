@@ -15,7 +15,7 @@
                     </div>
                     <div class="card-img">
                         <img v-if="item.poster_path !== null" :src="`${this.imagePath}${this.poster_sizes[3]}${item.poster_path}`" alt="Movie Poster">
-                        <div v-else class="not_available_poster fs-4 d-flex justify-content-center"><strong class="px-5">Copertina non disponibile</strong></div>
+                        <div v-else class="not_available_poster fs-4"><strong class="px-5">Copertina non disponibile</strong></div>
                     </div>
                     <div class="card-body">
                         <div>
