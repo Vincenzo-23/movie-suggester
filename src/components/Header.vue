@@ -26,6 +26,12 @@
     background-color: rgb(44, 197, 198);
     .logo{
         height: 150px;
+        @media screen and (max-width: 768px) {
+            height: 100px;
+        }
+        @media screen and (max-width: 468px) {
+            height: 80px;
+        }
     }
 }
 

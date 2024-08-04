@@ -3,7 +3,7 @@
         <div class="container text-center my-5 fs-3">
             Hai voglia di guardare un film o una serie tv ma non sai quale guardare? <br> Sei nel posto giusto, clicca il pulsante sottostante e scegli quelli che fanno fanno per te!
         </div>
-        <div class="container text-center my-5">
+        <div class="container text-center my-5 buttons">
             <button @click="fetchMovie()" class="btn me-4 fs-5">Consigliami un film</button>
             <button @click="fetchTv()" class="btn fs-5">Consigliami una serie tv</button>
         </div>
@@ -108,6 +108,12 @@ import axios from "axios"
     background-color: rgb(44, 197, 198);
     color: white;
     font-weight: 700;
+}
+.buttons{
+    @media screen and (max-width: 576px) {
+            display: flex;
+            justify-content: center;
+        }
 }
 .not_available_poster{
     width: 342px;
