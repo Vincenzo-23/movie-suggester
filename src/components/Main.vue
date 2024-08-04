@@ -102,7 +102,6 @@ import axios from "axios"
 
 <style lang="scss" scoped>
 .card{
-    width: 342px;
     margin-bottom: 100px;
 }
 .btn{
