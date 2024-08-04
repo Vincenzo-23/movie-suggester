@@ -7,7 +7,7 @@
             <button @click="fetchMovie()" class="btn me-4 fs-5">Consigliami un film</button>
             <button @click="fetchTv()" class="btn fs-5">Consigliami una serie tv</button>
         </div>
-        <div v-if="this.item != null">
+        <div v-if="this.item.title || this.item.name">
             <div class="container d-flex justify-content-center text-center">
                 <div class="card">
                     <div class="card-header">
@@ -15,14 +15,19 @@
                     </div>
                     <div class="card-img">
                         <img v-if="item.poster_path !== null" :src="`${this.imagePath}${this.poster_sizes[3]}${item.poster_path}`" alt="Movie Poster">
-                        <div v-else class="mt-4 not_available_poster d-flex justify-content-center align-items-center fs-4"><strong>Copertina non disponibile</strong></div>
+                        <div v-else class="not_available_poster fs-4 d-flex justify-content-center"><strong class="px-5">Copertina non disponibile</strong></div>
                     </div>
                     <div class="card-body">
                         <div>
                             <strong>Media voti:</strong> {{ item.vote_average }}/10
                         </div>
-                        <div v-if="item.release_date">
-                            <strong>Data di uscita:</strong> {{ item.release_date}}
+                        <div>
+                            <div v-if="item.release_date">
+                                <strong>Data di uscita:</strong> {{ item.release_date}}
+                            </div>
+                            <div v-else-if="item.first_air_date">
+                                <strong>Data di uscita:</strong> {{item.first_air_date}}
+                            </div>
                         </div>
                         <div v-if="item.runtime != null">
                             <strong>Durata:</strong> {{ item.runtime }} min.
@@ -62,17 +67,24 @@ import axios from "axios"
         methods: {
             fetchMovie(retryCount = 0){
                 const apiKey = `361d6824b040c59dc3ba6d0a8e180efe`;
-                const randomId = Math.floor(Math.random() * 5000) + 1;
+                const randomId = Math.floor(Math.random() * 100000) + 1;
 
                 axios.get(`https://api.themoviedb.org/3/movie/${randomId}?api_key=${apiKey}`)
                 .then(res => {
-                    this.item = res.data;
+                    if (res.data.adult === false){
+                        this.item = res.data;
+                    }else{
+                        // numbers of tries if the Movie is just for adults
+                        if (retryCount <100){
+                            this.fetchMovie(retryCount + 1);
+                        }
+                    }
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 404) {
                         
                         // numbers of tries if the ID won't be found
-                        if (retryCount < 50) {
+                        if (retryCount < 100) {
                             this.fetchMovie(retryCount + 1);
                         }    
                     }
@@ -80,17 +92,24 @@ import axios from "axios"
             },
             fetchTv(retryCount = 0){
                 const apiKey = `361d6824b040c59dc3ba6d0a8e180efe`;
-                const randomId = Math.floor(Math.random() * 5000) + 1;
+                const randomId = Math.floor(Math.random() * 100000) + 1;
 
                 axios.get(`https://api.themoviedb.org/3/tv/${randomId}?api_key=${apiKey}`)
                 .then(res => {
-                    this.item = res.data;
+                    if (res.data.adult === false){
+                        this.item = res.data;
+                    }else{
+                        // numbers of tries if the Series is just for adults
+                        if (retryCount <100){
+                            this.fetchMovie(retryCount + 1);
+                        }
+                    }
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 404) {
 
                         // numbers of tries if the ID won't be found
-                        if (retryCount < 50) {
+                        if (retryCount < 100) {
                             this.fetchTv(retryCount + 1);
                         }
                     }
@@ -116,8 +135,9 @@ import axios from "axios"
         }
 }
 .not_available_poster{
-    width: 342px;
     height: 513px;
+    display: flex;
+    align-items: center;
 }
 
 </style>
